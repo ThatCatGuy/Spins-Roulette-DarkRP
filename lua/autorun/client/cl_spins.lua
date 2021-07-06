@@ -41,6 +41,7 @@ local function EndSpin()
     if playersPanel then
         playersPanel.RemoveChildren(true)
     end
+    FrameButton:SetEnabled(true)
 end
 
 local function RemoveOldPanels()
@@ -52,6 +53,7 @@ end
 local function CreateFrame()
     if OldFrameCross and IsValid(OldFrameCross) then OldFrameCross:Remove() OldFrameCross = nil end
     local frame = vgui.Create("DFrame")
+    OldFrameCross = frame
     frame:SetTitle("Spins")
     frame:SetPos(ScrW() / 2, ScrH() / 2)
     frame:SetSize(w, h + 30)
@@ -63,6 +65,9 @@ local function CreateFrame()
         draw.RoundedBox( 8, 0, 0, frame:GetWide(), frame:GetTall(), Color( 40, 40, 40, 255 ) )
     end
     frame.OnClose = function()
+        if !spinning then
+            RemoveOldPanels()
+        end
         if spinning then
             EndSpin()
         end
@@ -72,6 +77,7 @@ local function CreateFrame()
     end
 
     local frameclose = vgui.Create( "DButton", frame )
+    FrameButton = frameclose
     frameclose:SetColor( Color( 255, 255, 255 ) )
     frameclose:SetText( "" )
     frameclose:SetSize( 30, 30 )
@@ -107,8 +113,6 @@ local function CreateFrame()
         drawOutline(w, h, Color(0, 0, 0))
         drawOutline(w, 30, Color(0, 0, 0)) 
     end
-
-    OldFrameCross = frame
 
     return frame
 end
@@ -305,6 +309,7 @@ local function OpenMenu()
     spin.DoClick = function()
         if !spinning then 
             RunConsoleCommand("_start_spin", 1, value, currentBet)
+            FrameButton:SetEnabled(false)
         end
     end
     CreatePlayersPanel(frame, betScroll)
