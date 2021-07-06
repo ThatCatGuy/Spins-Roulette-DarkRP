@@ -109,7 +109,7 @@ end
 hook.Add( "PlayerSay", "Spins", function( ply, text )
     if  ( string.lower( text ) == "/spins" or string.lower( text ) == "!spins" ) then
          SendMenu(ply)
-        return
+        return ""
     end
 end )
 
